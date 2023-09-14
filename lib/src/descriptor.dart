@@ -68,8 +68,10 @@ CreateTypeReference memoryCreateTypeReference({
     return references.putIfAbsent(
       typeCoordinates,
       () => MpbReferenceMsg()
-        ..referenceId = Int64(
-          effectiveReferenceSequence(),
+        ..referencePath.add(
+          Int64(
+            effectiveReferenceSequence(),
+          ),
         )
         ..freeze(),
     );

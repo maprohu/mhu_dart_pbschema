@@ -1,0 +1,1 @@
+export 'src/generated/mhu_dart_pbschema.pb.dart';

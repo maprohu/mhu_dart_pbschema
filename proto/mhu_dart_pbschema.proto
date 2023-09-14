@@ -97,5 +97,5 @@ enum MpbScalarTypeEnm {
 }
 
 message MpbReferenceMsg {
-  uint64 reference_id = 1;
+  repeated uint64 reference_path = 2;
 }
