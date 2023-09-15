@@ -12,6 +12,8 @@ typedef FieldMarkers<M extends Msg> = List<FieldMarker<M, dynamic>>;
 @Has()
 typedef OneofMarkers<M extends Msg> = List<OneofMarker<M>>;
 
+typedef LookupMessageMarkerByType = MessageMarker Function(Type type);
+typedef LookupMessageMarkerOf = MessageMarker<M> Function<M extends Msg>();
 
 typedef LookupFieldMarkerByProtoName<M extends Msg> = FieldMarker<M, dynamic>
     Function(
@@ -133,4 +135,22 @@ LogicalFieldMarker<M> castLogicalFieldMarker<M extends Msg>({
   @ext required LogicalFieldMarker logicalFieldMarker,
 }) {
   return logicalFieldMarker as LogicalFieldMarker<M>;
+}
+
+IMap<Type, MessageMarker> createPbschemasLookupMessageMarkerByType({
+  @ext required Iterable<Pbschema> pbschemas,
+}) {
+  final map = {
+    for (final schema in pbschemas)
+      for (final marker in schema.messageMarkers)
+        marker.messageTypeGeneric.genericFunctionType(): marker,
+  };
+  return map.toIMap();
+}
+
+LookupMessageMarkerOf createPbschemasLookupMessageMarkerOf({
+  @ext required Iterable<Pbschema> pbschemas,
+}) {
+  final map = createPbschemasLookupMessageMarkerByType(pbschemas: pbschemas);
+  return <M extends Msg>() => map[M] as MessageMarker<M>;
 }
